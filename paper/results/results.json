@@ -1,0 +1,216 @@
+{
+  "seed": 20260101,
+  "study1": {
+    "Q": 6,
+    "N": 4000,
+    "B_MAX": 20000,
+    "P_HALT": 0.06,
+    "n_halt": 738,
+    "n_nonhalt": 3262,
+    "halt_frac": 0.1845,
+    "nonhalt_frac": 0.8155,
+    "max_halt_time": 32,
+    "pct": {
+      "50": 2,
+      "90": 6,
+      "99": 13
+    },
+    "sweep": [
+      {
+        "budget": 1,
+        "confirmed": 226,
+        "resolved": 0.0565,
+        "residue": 0.9435
+      },
+      {
+        "budget": 2,
+        "confirmed": 395,
+        "resolved": 0.09875,
+        "residue": 0.90125
+      },
+      {
+        "budget": 5,
+        "confirmed": 652,
+        "resolved": 0.163,
+        "residue": 0.837
+      },
+      {
+        "budget": 10,
+        "confirmed": 722,
+        "resolved": 0.1805,
+        "residue": 0.8195
+      },
+      {
+        "budget": 20,
+        "confirmed": 735,
+        "resolved": 0.18375,
+        "residue": 0.81625
+      },
+      {
+        "budget": 50,
+        "confirmed": 738,
+        "resolved": 0.1845,
+        "residue": 0.8155
+      },
+      {
+        "budget": 100,
+        "confirmed": 738,
+        "resolved": 0.1845,
+        "residue": 0.8155
+      },
+      {
+        "budget": 200,
+        "confirmed": 738,
+        "resolved": 0.1845,
+        "residue": 0.8155
+      },
+      {
+        "budget": 500,
+        "confirmed": 738,
+        "resolved": 0.1845,
+        "residue": 0.8155
+      },
+      {
+        "budget": 1000,
+        "confirmed": 738,
+        "resolved": 0.1845,
+        "residue": 0.8155
+      },
+      {
+        "budget": 2000,
+        "confirmed": 738,
+        "resolved": 0.1845,
+        "residue": 0.8155
+      },
+      {
+        "budget": 5000,
+        "confirmed": 738,
+        "resolved": 0.1845,
+        "residue": 0.8155
+      },
+      {
+        "budget": 10000,
+        "confirmed": 738,
+        "resolved": 0.1845,
+        "residue": 0.8155
+      },
+      {
+        "budget": 20000,
+        "confirmed": 738,
+        "resolved": 0.1845,
+        "residue": 0.8155
+      }
+    ]
+  },
+  "study2": {
+    "detectors": [
+      "signature",
+      "keyword",
+      "entropy"
+    ],
+    "M": 500,
+    "total_trials": 1500,
+    "total_evasions": 1500,
+    "evasion_rate": 1.0,
+    "per_detector": {
+      "signature": {
+        "trials": 500,
+        "evasions": 500,
+        "rate": 1.0
+      },
+      "keyword": {
+        "trials": 500,
+        "evasions": 500,
+        "rate": 1.0
+      },
+      "entropy": {
+        "trials": 500,
+        "evasions": 500,
+        "rate": 1.0
+      }
+    }
+  },
+  "study3": {
+    "N": 20000,
+    "n_benign": 8000,
+    "n_mal": 12000,
+    "p_benign": 0.4,
+    "median_delay": 63,
+    "p99_delay": 147488,
+    "B_window": 1000,
+    "recall_window": 0.69975,
+    "fnr_window": 0.30025,
+    "sweep": [
+      {
+        "budget": 10,
+        "recall": 0.057166666666666664,
+        "fnr": 0.9428333333333333,
+        "accuracy": 0.4343,
+        "mean_cost": 9.91305
+      },
+      {
+        "budget": 30,
+        "recall": 0.3075,
+        "fnr": 0.6925,
+        "accuracy": 0.5845,
+        "mean_cost": 27.7127
+      },
+      {
+        "budget": 100,
+        "recall": 0.5665833333333333,
+        "fnr": 0.4334166666666667,
+        "accuracy": 0.73995,
+        "mean_cost": 77.4256
+      },
+      {
+        "budget": 300,
+        "recall": 0.61475,
+        "fnr": 0.38525,
+        "accuracy": 0.76885,
+        "mean_cost": 205.4129
+      },
+      {
+        "budget": 1000,
+        "recall": 0.69975,
+        "fnr": 0.30025,
+        "accuracy": 0.81985,
+        "mean_cost": 630.2261
+      },
+      {
+        "budget": 3000,
+        "recall": 0.8339166666666666,
+        "fnr": 0.16608333333333336,
+        "accuracy": 0.90035,
+        "mean_cost": 1692.1776
+      },
+      {
+        "budget": 10000,
+        "recall": 0.8960833333333333,
+        "fnr": 0.10391666666666666,
+        "accuracy": 0.93765,
+        "mean_cost": 4997.04695
+      },
+      {
+        "budget": 30000,
+        "recall": 0.9156666666666666,
+        "fnr": 0.08433333333333337,
+        "accuracy": 0.9494,
+        "mean_cost": 14128.92135
+      },
+      {
+        "budget": 100000,
+        "recall": 0.9768333333333333,
+        "fnr": 0.02316666666666667,
+        "accuracy": 0.9861,
+        "mean_cost": 44164.69625
+      },
+      {
+        "budget": 300000,
+        "recall": 0.99925,
+        "fnr": 0.0007500000000000284,
+        "accuracy": 0.99955,
+        "mean_cost": 124922.894
+      }
+    ]
+  }
+}
