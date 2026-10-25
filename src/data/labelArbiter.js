@@ -25,19 +25,47 @@ function demandEntries(demandByLayer) {
     .sort(([a], [b]) => a.localeCompare(b));
 }
 
-function redistributeUnused(quotas, demand, capacity, order) {
-  let used = Array.from(quotas.values()).reduce((sum, value) => sum + value, 0);
-  while (used < capacity) {
-    let changed = false;
-    for (const layerId of order) {
-      const current = quotas.get(layerId) || 0;
-      if (current >= (demand.get(layerId) || 0)) continue;
-      quotas.set(layerId, current + 1);
-      used++;
-      changed = true;
-      if (used >= capacity) break;
+function redistributeUnused(quotas, demand, capacity, order, count = order.length, weighted = false) {
+  let used = 0;
+  let maxRoom = 0;
+  for (let i = 0; i < count; i++) {
+    const layerId = weighted ? order[i].layerId : order[i];
+    const current = quotas.get(layerId) || 0;
+    used += current;
+    maxRoom = Math.max(maxRoom, (demand.get(layerId) || 0) - current);
+  }
+  let remaining = capacity - used;
+  if (remaining <= 0 || maxRoom <= 0) return quotas;
+
+  // Skip complete round-robin rounds in O(layers * log(capacity)) time.
+  // A final partial round follows the same priority order as single increments.
+  let low = 0;
+  let high = Math.min(remaining, maxRoom);
+  while (low < high) {
+    const rounds = low + Math.ceil((high - low) / 2);
+    let granted = 0;
+    for (let i = 0; i < count; i++) {
+      const layerId = weighted ? order[i].layerId : order[i];
+      const room = (demand.get(layerId) || 0) - (quotas.get(layerId) || 0);
+      granted += Math.min(room, rounds);
     }
-    if (!changed) break;
+    if (granted <= remaining) low = rounds;
+    else high = rounds - 1;
+  }
+  for (let i = 0; i < count; i++) {
+    const layerId = weighted ? order[i].layerId : order[i];
+    const current = quotas.get(layerId) || 0;
+    const grant = Math.min((demand.get(layerId) || 0) - current, low);
+    quotas.set(layerId, current + grant);
+    remaining -= grant;
+  }
+  for (let i = 0; i < count && remaining > 0; i++) {
+    const layerId = weighted ? order[i].layerId : order[i];
+    const current = quotas.get(layerId) || 0;
+    if (current < (demand.get(layerId) || 0)) {
+      quotas.set(layerId, current + 1);
+      remaining--;
+    }
   }
   return quotas;
 }
@@ -72,19 +100,9 @@ function allocateLayerQuotasInto(
       quotas.set(layerId, quota);
       used += quota;
     }
-    while (used < capacity) {
-      let changed = false;
-      for (let i = 0; i < idCount && used < capacity; i++) {
-        const layerId = ids[i];
-        const current = quotas.get(layerId) || 0;
-        if (current >= (demand.get(layerId) || 0)) continue;
-        quotas.set(layerId, current + 1);
-        used++;
-        changed = true;
-      }
-      if (!changed) break;
-    }
-    return quotas;
+    return used < capacity
+      ? redistributeUnused(quotas, demand, capacity, ids, idCount)
+      : quotas;
   }
 
   let totalWeight = 0;
@@ -135,21 +153,7 @@ function allocateLayerQuotasInto(
     }
   }
 
-  let used = 0;
-  for (let i = 0; i < idCount; i++) used += quotas.get(ids[i]) || 0;
-  while (used < capacity) {
-    let changed = false;
-    for (let i = 0; i < idCount && used < capacity; i++) {
-      const layerId = priorityOrder[i].layerId;
-      const current = quotas.get(layerId) || 0;
-      if (current >= (demand.get(layerId) || 0)) continue;
-      quotas.set(layerId, current + 1);
-      used++;
-      changed = true;
-    }
-    if (!changed) break;
-  }
-  return quotas;
+  return redistributeUnused(quotas, demand, capacity, priorityOrder, idCount, true);
 }
 
 /**

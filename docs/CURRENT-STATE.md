@@ -2,6 +2,13 @@
 
 Updated: August 24, 2026
 
+Quota performance update (October 25, 2026): both public allocation and the
+pooled LabelArbiter path redistribute unused quota by finding complete
+round-robin rounds with binary search, followed by one ordered partial round.
+Redistribution takes O(L log(C + 1)) work for L layers and capacity C, rather
+than potentially scanning exhausted layers once per remaining slot. Selected
+quotas, Elastic/Weighted priorities, and allocation scratch reuse are preserved.
+
 > **2026-08-23 — first-run mission launcher** (`src/firstRunExperience.js`,
 > `#first-run-launcher`, styles at the tail of `style.css`). After startup
 > settles, a fresh session gets one card offering **Live Contacts · Space

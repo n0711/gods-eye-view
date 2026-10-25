@@ -51,6 +51,22 @@ test('Elastic redistributes unused capacity', () => {
   );
 });
 
+test('redistribution preserves ordered partial rounds after layers saturate', () => {
+  assert.deepEqual(
+    objectQuotas(allocateLayerQuotas({ a: 1, b: 200, c: 200 }, 100, ALLOCATION_ELASTIC)),
+    { a: 1, b: 50, c: 49 },
+  );
+});
+
+test('large skewed demand redistributes in bulk for both allocation policies', () => {
+  for (const strategy of [ALLOCATION_ELASTIC, ALLOCATION_WEIGHTED]) {
+    assert.deepEqual(
+      objectQuotas(allocateLayerQuotas({ a: 1, b: 1, c: 1_000_000_000 }, 1_000_000_000, strategy)),
+      { a: 1, b: 1, c: 999_999_998 },
+    );
+  }
+});
+
 test('Weighted is deterministic, representative, and work-conserving', () => {
   const first = allocateLayerQuotas({ flights: 1000, satellites: 100 }, 28, ALLOCATION_WEIGHTED);
   const reverse = allocateLayerQuotas(new Map([['satellites', 100], ['flights', 1000]]), 28, ALLOCATION_WEIGHTED);
